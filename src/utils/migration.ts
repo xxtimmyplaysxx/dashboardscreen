@@ -1,0 +1,64 @@
+import { DEFAULT_SETTINGS, CONFIG_VERSION } from "../config/defaultSettings";
+import { LAYOUT_DEFINITIONS } from "../layouts/layoutDefinitions";
+import type { ContentType } from "../types/content";
+import type { DashboardSettings } from "../types/settings";
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function normalizeTiles(settings: DashboardSettings): DashboardSettings {
+  const definition = LAYOUT_DEFINITIONS[settings.layout] ?? LAYOUT_DEFINITIONS.hybrid;
+  const existing = new Map(settings.tiles.map((tile) => [tile.id, tile]));
+  const fallbackContent: ContentType[] = ["natureImage", "clockDate", "weather", "newsSwiss", "quote", "crypto"];
+
+  return {
+    ...settings,
+    layout: definition.id,
+    tiles: definition.slots.map((slot, index) => {
+      const oldTile = existing.get(slot.id);
+      return {
+        id: slot.id,
+        label: slot.label,
+        size: slot.size,
+        contentType: oldTile?.contentType ?? fallbackContent[index] ?? "clock",
+        settings: oldTile?.settings ?? {}
+      };
+    })
+  };
+}
+
+export function migrateSettings(input: unknown): DashboardSettings {
+  if (!isObject(input)) {
+    return DEFAULT_SETTINGS;
+  }
+
+  const partial = input as Partial<DashboardSettings>;
+  const migrated: DashboardSettings = {
+    ...DEFAULT_SETTINGS,
+    ...partial,
+    version: CONFIG_VERSION,
+    design: {
+      ...DEFAULT_SETTINGS.design,
+      ...(isObject(partial.design) ? partial.design : {})
+    },
+    workingHours: {
+      ...DEFAULT_SETTINGS.workingHours,
+      ...(isObject(partial.workingHours) ? partial.workingHours : {})
+    },
+    cache: {
+      ...DEFAULT_SETTINGS.cache,
+      ...(isObject(partial.cache) ? partial.cache : {})
+    }
+  };
+
+  if (!LAYOUT_DEFINITIONS[migrated.layout]) {
+    migrated.layout = DEFAULT_SETTINGS.layout;
+  }
+
+  return normalizeTiles(migrated);
+}
+
+export function createTilesForLayout(layout: DashboardSettings["layout"], previous: DashboardSettings): DashboardSettings["tiles"] {
+  return normalizeTiles({ ...previous, layout }).tiles;
+}
