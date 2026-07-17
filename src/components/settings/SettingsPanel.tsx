@@ -51,6 +51,18 @@ export function SettingsPanel({ settings, setSettings, onClose }: SettingsPanelP
     setMessage("Einstellungen wurden zurückgesetzt.");
   };
 
+  const applyProfessionalPreset = () => {
+    setSettings((current) => ({
+      ...current,
+      layout: DEFAULT_SETTINGS.layout,
+      tiles: DEFAULT_SETTINGS.tiles,
+      viewOrder: DEFAULT_SETTINGS.viewOrder,
+      activeContent: DEFAULT_SETTINGS.activeContent,
+      setupComplete: true
+    }));
+    setMessage("Professionelles 4-Kachel-Layout wurde angewendet.");
+  };
+
   return (
     <div className="settings-backdrop" role="dialog" aria-modal="true" aria-label="Einstellungen">
       <div className="settings-panel">
@@ -249,6 +261,9 @@ export function SettingsPanel({ settings, setSettings, onClose }: SettingsPanelP
               </button>
               <button className="secondary-button" type="button" onClick={() => importInputRef.current?.click()}>
                 Einstellungen importieren
+              </button>
+              <button className="secondary-button" type="button" onClick={applyProfessionalPreset}>
+                4-Kachel-Layout anwenden
               </button>
               <button className="secondary-button danger" type="button" onClick={reset}>
                 Zurücksetzen

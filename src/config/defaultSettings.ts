@@ -2,7 +2,7 @@ import type { ContentType } from "../types/content";
 import type { DashboardSettings, WorkingHours } from "../types/settings";
 import { LAYOUT_DEFINITIONS } from "../layouts/layoutDefinitions";
 
-export const CONFIG_VERSION = 1;
+export const CONFIG_VERSION = 2;
 
 export const DEFAULT_ACTIVE_CONTENT: ContentType[] = [
   "clock",

@@ -48,6 +48,12 @@ export function migrateSettings(input: unknown): DashboardSettings {
   }
 
   const partial = input as Partial<DashboardSettings>;
+  const sourceVersion = typeof partial.version === "number" ? partial.version : 0;
+  const shouldApplyProfessionalPreset =
+    sourceVersion < 2 ||
+    !Array.isArray(partial.tiles) ||
+    partial.tiles.every((tile) => !Array.isArray(tile.contentTypes) || tile.contentTypes.length <= 1);
+
   const migrated: DashboardSettings = {
     ...DEFAULT_SETTINGS,
     ...partial,
@@ -68,6 +74,28 @@ export function migrateSettings(input: unknown): DashboardSettings {
 
   if (!LAYOUT_DEFINITIONS[migrated.layout]) {
     migrated.layout = DEFAULT_SETTINGS.layout;
+  }
+
+  if (shouldApplyProfessionalPreset) {
+    return {
+      ...normalizeTiles({
+        ...migrated,
+        layout: DEFAULT_SETTINGS.layout,
+        tiles: DEFAULT_SETTINGS.tiles
+      }),
+      setupComplete: migrated.setupComplete,
+      userName: migrated.userName,
+      location: migrated.location,
+      activeContent: migrated.activeContent,
+      viewOrder: migrated.viewOrder,
+      rotationSeconds: migrated.rotationSeconds,
+      newsSources: migrated.newsSources,
+      newsCategories: migrated.newsCategories,
+      imageCategories: migrated.imageCategories,
+      workingHours: migrated.workingHours,
+      design: migrated.design,
+      cache: migrated.cache
+    };
   }
 
   return normalizeTiles(migrated);
