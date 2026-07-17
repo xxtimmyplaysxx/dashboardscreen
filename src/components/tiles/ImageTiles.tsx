@@ -11,8 +11,8 @@ interface ImageTileProps {
 
 function pickImage(images: ImageItem[], category: ImageTileProps["category"], index: number): ImageItem | undefined {
   const keywords = {
-    nature: ["Natur", "Berge", "Seen", "Wälder", "Meer", "Schnee", "Winter", "Sonnen"],
-    car: ["Porsche", "Sportwagen", "Autos", "Motorsport", "Fahrzeuge", "Motorräder"],
+    nature: ["Natur", "Berge", "Seen", "Waelder", "Wälder", "Meer", "Schnee", "Winter", "Sonnen"],
+    car: ["Porsche", "Sportwagen", "Autos", "Motorsport", "Fahrzeuge", "Motorraeder", "Motorräder"],
     space: ["Weltraum", "Planeten", "Galaxien", "Nebel"]
   }[category];
   const filtered = images.filter((image) => keywords.some((word) => image.category.toLowerCase().includes(word.toLowerCase())));
@@ -32,12 +32,21 @@ function ImageTile({ size, images, index, category, label }: ImageTileProps) {
     );
   }
 
+  const title = image.location ?? image.title ?? image.category;
+  const detail = [image.title && image.title !== image.location ? image.title : "", image.category].filter(Boolean).join(" / ");
+
   return (
     <TileFrame size={size} className="image-tile" ariaLabel={image.alt} flush>
       <img src={image.url} alt={image.alt} loading="lazy" />
       <div className="image-caption">
-        <span>{image.category}</span>
-        <span>{[image.source, image.photographer].filter(Boolean).join(" · ")}</span>
+        <div>
+          <strong>{title}</strong>
+          {detail && <span>{detail}</span>}
+        </div>
+        <div>
+          <strong>{image.source}</strong>
+          <span>{image.photographer ?? "Bildquelle"}</span>
+        </div>
       </div>
     </TileFrame>
   );

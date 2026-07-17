@@ -709,7 +709,6 @@ select:focus-visible {
 .news-fullscreen {
   display: grid;
   padding: 48px;
-  place-items: center;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(238, 244, 255, 0.94) 52%, rgba(247, 255, 246, 0.94)),
     #ffffff;
@@ -747,10 +746,12 @@ select:focus-visible {
 }
 
 .fullscreen-copy {
-  position: relative;
+  position: absolute;
   z-index: 1;
-  max-width: 980px;
-  margin: auto;
+  top: 50%;
+  left: 50%;
+  width: min(980px, calc(100% - 96px));
+  transform: translate(-50%, -50%);
   color: #1d1d1f;
   text-align: center;
 }
@@ -797,6 +798,7 @@ select:focus-visible {
   background: rgba(255, 255, 255, 0.78);
   color: #3f4652;
   font-size: 0.92rem;
+  white-space: nowrap;
 }
 
 .image-caption {
@@ -807,8 +809,38 @@ select:focus-visible {
   left: 22px;
   display: flex;
   justify-content: space-between;
+  align-items: end;
   gap: 18px;
-  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.84rem;
+  pointer-events: none;
+}
+
+.image-caption > div {
+  display: grid;
+  max-width: min(560px, 48%);
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(14px);
+}
+
+.image-caption > div:last-child {
+  justify-items: end;
+  text-align: right;
+}
+
+.image-caption strong {
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.15;
+}
+
+.image-caption span {
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.25;
 }
 
 .text-feature-tile {
@@ -1582,6 +1614,27 @@ input[type="color"] {
   .news-fullscreen,
   .weather-fullscreen {
     padding: 24px;
+  }
+
+  .fullscreen-copy {
+    width: calc(100% - 36px);
+  }
+
+  .news-meta-row {
+    max-height: 110px;
+    overflow: hidden;
+  }
+
+  .image-caption {
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+    align-items: stretch;
+  }
+
+  .image-caption > div {
+    max-width: none;
+    padding: 10px 12px;
   }
 
   .weather-current h1 {

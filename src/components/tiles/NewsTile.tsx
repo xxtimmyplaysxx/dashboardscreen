@@ -9,6 +9,28 @@ interface NewsTileProps {
   label: string;
 }
 
+function formatPublishedAt(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat("de-CH", {
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(date);
+}
+
+function newsMeta(item: NewsItem): string[] {
+  return [
+    item.source,
+    item.domain,
+    item.author ? `Autor: ${item.author}` : "",
+    ...((item.tags?.length ? item.tags : [item.category]).filter(Boolean)),
+    formatPublishedAt(item.publishedAt)
+  ].filter((value, index, values): value is string => Boolean(value) && values.indexOf(value) === index);
+}
+
 export function NewsTile({ size, items, index, label }: NewsTileProps) {
   const item = items.length ? items[index % items.length] : undefined;
 
@@ -48,10 +70,11 @@ export function NewsFullscreenView({ items, index, label }: Omit<NewsTileProps, 
           {label} · {item.source} · {formatRelativeTime(item.publishedAt)}
         </p>
         <h1>{item.title}</h1>
-        <p>{item.description}</p>
+        {item.description && <p>{item.description}</p>}
         <div className="news-meta-row">
-          <span>{item.source}</span>
-          <span>{item.category}</span>
+          {newsMeta(item).map((meta) => (
+            <span key={meta}>{meta}</span>
+          ))}
           <span>{formatRelativeTime(item.publishedAt)}</span>
         </div>
       </div>

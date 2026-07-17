@@ -39,8 +39,41 @@ function text(value: unknown): string {
     const record = value as Record<string, unknown>;
     if (typeof record["#text"] === "string") return stripHtml(record["#text"]);
     if (typeof record["@_url"] === "string") return record["@_url"];
+    if (typeof record["@_href"] === "string") return record["@_href"];
+    if (typeof record.name === "string") return stripHtml(record.name);
+    if (typeof record.email === "string") return stripHtml(record.email);
   }
   return "";
+}
+
+function linkFrom(item: Record<string, unknown>): string | undefined {
+  const direct = text(item.link);
+  if (direct) return direct;
+  const links = asArray(item.link as Record<string, unknown> | Record<string, unknown>[] | undefined);
+  const alternate = links.find((link) => link["@_rel"] === "alternate") ?? links[0];
+  const href = text(alternate);
+  return href || undefined;
+}
+
+function domainFrom(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return undefined;
+  }
+}
+
+function tagsFrom(item: Record<string, unknown>, fallback: string): string[] {
+  const categories = asArray(item.category as unknown[] | unknown | undefined)
+    .map((entry) => text(entry))
+    .filter(Boolean);
+  return Array.from(new Set([fallback, ...categories])).slice(0, 4);
+}
+
+function authorFrom(item: Record<string, unknown>): string | undefined {
+  const author = text(item["dc:creator"] ?? item.creator ?? item.author);
+  return author || undefined;
 }
 
 function imageFrom(item: Record<string, unknown>): string | undefined {
@@ -64,16 +97,22 @@ async function loadFeed(feed: (typeof feeds)[number]) {
   const atom = parsed.feed as Record<string, unknown> | undefined;
   const items = asArray((channel?.item ?? atom?.entry) as Record<string, unknown> | Record<string, unknown>[] | undefined);
 
-  return items.slice(0, 10).map((item, index) => ({
-    id: `${feed.id}-${text(item.guid ?? item.id ?? item.link ?? item.title) || index}`,
-    title: text(item.title) || "Nachricht",
-    description: text(item.description ?? item.summary ?? item.content).slice(0, 220),
-    source: feed.source,
-    category: feed.category,
-    publishedAt: text(item.pubDate ?? item.published ?? item.updated) || new Date().toISOString(),
-    image: imageFrom(item),
-    url: text(item.link)
-  }));
+  return items.slice(0, 10).map((item, index) => {
+    const url = linkFrom(item);
+    return {
+      id: `${feed.id}-${text(item.guid ?? item.id ?? url ?? item.title) || index}`,
+      title: text(item.title) || "Nachricht",
+      description: text(item.description ?? item.summary ?? item.content).slice(0, 340),
+      source: feed.source,
+      category: feed.category,
+      publishedAt: text(item.pubDate ?? item.published ?? item.updated) || new Date().toISOString(),
+      image: imageFrom(item),
+      url,
+      domain: domainFrom(url),
+      author: authorFrom(item),
+      tags: tagsFrom(item, feed.category)
+    };
+  });
 }
 
 export const handler: Handler = async (event) => {

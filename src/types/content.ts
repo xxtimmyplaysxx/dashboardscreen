@@ -56,6 +56,9 @@ export interface NewsItem {
   publishedAt: string;
   image?: string;
   url?: string;
+  author?: string;
+  domain?: string;
+  tags?: string[];
 }
 
 export interface ImageItem {
@@ -65,6 +68,8 @@ export interface ImageItem {
   category: string;
   source: string;
   photographer?: string;
+  location?: string;
+  title?: string;
   link?: string;
 }
 
