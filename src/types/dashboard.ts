@@ -11,6 +11,7 @@ export type LayoutTemplate =
 export interface DashboardTile {
   id: string;
   label: string;
+  contentTypes: ContentType[];
   contentType: ContentType;
   size: TileSize;
   settings: Record<string, unknown>;

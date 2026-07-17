@@ -16,14 +16,12 @@ const curated = [
   ["abstrakte minimalistische Hintergründe", "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1800&q=82", "Minimalistischer Hintergrund"]
 ] as const;
 
-interface UnsplashResponse {
-  results: Array<{
-    id: string;
-    alt_description?: string;
-    urls: { regular: string };
-    user: { name: string; links?: { html?: string } };
-    links?: { html?: string };
-  }>;
+interface UnsplashPhoto {
+  id: string;
+  alt_description?: string;
+  urls: { regular: string };
+  user: { name: string; links?: { html?: string } };
+  links?: { html?: string };
 }
 
 interface NasaApod {
@@ -37,7 +35,9 @@ interface NasaApod {
 function curatedImages(categories: string[]) {
   const lowered = categories.map((category) => category.toLowerCase());
   const selected = curated.filter(([category]) => lowered.length === 0 || lowered.some((item) => category.toLowerCase().includes(item)));
-  return (selected.length ? selected : curated).map(([category, url, alt], index) => ({
+  const salt = `${new Date().toISOString().slice(0, 10)}-${categories.join("|")}`;
+  const sorted = [...(selected.length ? selected : curated)].sort((a, b) => hash(`${a[0]}-${salt}`) - hash(`${b[0]}-${salt}`));
+  return sorted.map(([category, url, alt], index) => ({
     id: `curated-${index}`,
     url,
     alt,
@@ -47,14 +47,18 @@ function curatedImages(categories: string[]) {
   }));
 }
 
+function hash(value: string) {
+  return value.split("").reduce((result, char) => ((result << 5) - result + char.charCodeAt(0)) | 0, 0);
+}
+
 async function loadUnsplash(categories: string[]) {
   const key = process.env.UNSPLASH_ACCESS_KEY;
   if (!key) return [];
   const query = categories.slice(0, 3).join(" ") || "minimal nature";
-  const data = await fetchJson<UnsplashResponse>(
-    `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=landscape&per_page=12&client_id=${key}`
+  const photos = await fetchJson<UnsplashPhoto[]>(
+    `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&count=12&client_id=${key}`
   );
-  return data.results.map((photo) => ({
+  return photos.map((photo) => ({
     id: photo.id,
     url: photo.urls.regular,
     alt: photo.alt_description || query,

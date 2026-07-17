@@ -21,6 +21,7 @@ function fullscreenTile(contentType: ContentType): DashboardTile {
     id: "fullscreen",
     label: "Vollbild",
     size: "fullscreen",
+    contentTypes: [contentType],
     contentType,
     settings: {}
   };

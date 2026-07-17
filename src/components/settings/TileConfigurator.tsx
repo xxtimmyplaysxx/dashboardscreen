@@ -21,10 +21,18 @@ export function TileConfigurator({ settings, onChange, showLayoutPicker = true }
     });
   };
 
-  const updateTile = (tileId: string, contentType: ContentType) => {
+  const toggleTileContent = (tileId: string, contentType: ContentType) => {
     onChange({
       ...settings,
-      tiles: settings.tiles.map((tile) => (tile.id === tileId ? { ...tile, contentType } : tile))
+      tiles: settings.tiles.map((tile) => {
+        if (tile.id !== tileId) return tile;
+        const current = tile.contentTypes?.length ? tile.contentTypes : [tile.contentType];
+        const next = current.includes(contentType)
+          ? current.filter((type) => type !== contentType)
+          : [...current, contentType];
+        const contentTypes = next.length ? next : current;
+        return { ...tile, contentTypes, contentType: contentTypes[0] };
+      })
     });
   };
 
@@ -49,18 +57,22 @@ export function TileConfigurator({ settings, onChange, showLayoutPicker = true }
       <div className={`layout-preview preview-${settings.layout}`} aria-label="Kachelbelegung">
         {settings.tiles.map((tile) => (
           <div className={`preview-slot preview-${tile.size}`} key={tile.id}>
-            <label htmlFor={`tile-${tile.id}`}>{tile.label}</label>
-            <select
-              id={`tile-${tile.id}`}
-              value={tile.contentType}
-              onChange={(event) => updateTile(tile.id, event.target.value as ContentType)}
-            >
+            <div className="tile-config-label">
+              <span>{tile.label}</span>
+              <small>{(tile.contentTypes?.length ?? 1)} aktiv</small>
+            </div>
+            <div className="tile-content-chips">
               {CONTENT_OPTIONS.filter((option) => isTileContentAllowed(tile.size, option.type)).map((option) => (
-                <option value={option.type} key={option.type}>
+                <button
+                  type="button"
+                  className={(tile.contentTypes?.length ? tile.contentTypes : [tile.contentType]).includes(option.type) ? "mini-chip active" : "mini-chip"}
+                  key={option.type}
+                  onClick={() => toggleTileContent(tile.id, option.type)}
+                >
                   {option.label}
-                </option>
+                </button>
               ))}
-            </select>
+            </div>
           </div>
         ))}
       </div>

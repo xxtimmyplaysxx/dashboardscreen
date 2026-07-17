@@ -22,7 +22,11 @@ export function validateSettings(value: unknown): { ok: true; settings: Dashboar
   }
 
   const validContent = new Set(CONTENT_OPTIONS.map((option) => option.type));
-  const invalidTile = maybe.tiles.find((tile) => !validContent.has(tile.contentType));
+  const invalidTile = maybe.tiles.find((tile) => {
+    const legacyContent = tile.contentType ? [tile.contentType] : [];
+    const contentTypes = Array.isArray(tile.contentTypes) && tile.contentTypes.length ? tile.contentTypes : legacyContent;
+    return contentTypes.length === 0 || contentTypes.some((contentType) => !validContent.has(contentType));
+  });
   if (invalidTile) {
     return { ok: false, reason: "Mindestens eine Kachel verwendet einen unbekannten Inhalt." };
   }

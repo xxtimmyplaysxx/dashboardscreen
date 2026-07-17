@@ -10,18 +10,32 @@ function isObject(value: unknown): value is Record<string, unknown> {
 function normalizeTiles(settings: DashboardSettings): DashboardSettings {
   const definition = LAYOUT_DEFINITIONS[settings.layout] ?? LAYOUT_DEFINITIONS.hybrid;
   const existing = new Map(settings.tiles.map((tile) => [tile.id, tile]));
-  const fallbackContent: ContentType[] = ["natureImage", "clockDate", "weather", "newsSwiss", "quote", "crypto"];
+  const fallbackContent: ContentType[][] = [
+    ["natureImage", "newsSwiss", "carImage"],
+    ["clockDate", "greeting"],
+    ["weather", "weatherForecast"],
+    ["crypto", "finance"],
+    ["quote", "fact"],
+    ["newsTech", "newsBusiness"]
+  ];
 
   return {
     ...settings,
     layout: definition.id,
     tiles: definition.slots.map((slot, index) => {
       const oldTile = existing.get(slot.id);
+      const oldContentTypes: ContentType[] = Array.isArray(oldTile?.contentTypes) && oldTile.contentTypes.length
+        ? oldTile.contentTypes
+        : oldTile?.contentType
+          ? [oldTile.contentType]
+          : fallbackContent[index] ?? ["clock"];
+      const contentTypes: ContentType[] = oldContentTypes.length ? oldContentTypes : ["clock"];
       return {
         id: slot.id,
         label: slot.label,
         size: slot.size,
-        contentType: oldTile?.contentType ?? fallbackContent[index] ?? "clock",
+        contentTypes,
+        contentType: contentTypes[0],
         settings: oldTile?.settings ?? {}
       };
     })

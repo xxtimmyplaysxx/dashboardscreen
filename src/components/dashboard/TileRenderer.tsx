@@ -43,7 +43,11 @@ interface TileRendererProps {
 }
 
 export function TileRenderer({ tile, data, settings, rotationIndex }: TileRendererProps) {
-  switch (tile.contentType) {
+  const contentTypes = tile.contentTypes?.length ? tile.contentTypes : [tile.contentType];
+  const rotationOffset = tile.id.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const contentType = contentTypes[(rotationIndex + rotationOffset) % contentTypes.length] ?? tile.contentType;
+
+  switch (contentType) {
     case "clock":
       return <ClockTile size={tile.size} />;
     case "date":
@@ -62,11 +66,11 @@ export function TileRenderer({ tile, data, settings, rotationIndex }: TileRender
     case "newsBusiness":
     case "newsSport":
     case "formula1": {
-      const items = filterNews(data.news, tile.contentType);
+      const items = filterNews(data.news, contentType);
       if (tile.size === "fullscreen") {
-        return <NewsFullscreenView items={items} index={rotationIndex} label={optionLabel(tile.contentType)} />;
+        return <NewsFullscreenView items={items} index={rotationIndex} label={optionLabel(contentType)} />;
       }
-      return <NewsTile size={tile.size} items={items} index={rotationIndex} label={optionLabel(tile.contentType)} />;
+      return <NewsTile size={tile.size} items={items} index={rotationIndex} label={optionLabel(contentType)} />;
     }
     case "natureImage":
       return <NatureImageTile size={tile.size} images={data.images} index={rotationIndex} />;

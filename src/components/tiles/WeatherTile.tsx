@@ -15,7 +15,20 @@ function WeatherGlyph({ icon }: { icon: string }) {
   const label = weatherSymbols[icon] ?? "Wetter";
   return (
     <span className={`weather-glyph weather-${icon}`} aria-label={label}>
-      <span />
+      <span className="weather-sun" />
+      <span className="weather-cloud" />
+      <span className="weather-fog-lines" />
+      <span className="weather-rain-drops">
+        <i />
+        <i />
+        <i />
+      </span>
+      <span className="weather-snowflakes">
+        <i />
+        <i />
+        <i />
+      </span>
+      <span className="weather-bolt" />
     </span>
   );
 }

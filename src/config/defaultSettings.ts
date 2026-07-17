@@ -39,11 +39,19 @@ export const DEFAULT_WORKING_HOURS: WorkingHours = {
   sun: { enabled: false, start: "09:00", end: "14:00" }
 };
 
-const defaultHybridTiles = LAYOUT_DEFINITIONS.hybrid.slots.map((slot, index) => ({
+const defaultGridContent: ContentType[][] = [
+  ["natureImage", "newsSwiss", "carImage"],
+  ["clockDate", "greeting"],
+  ["weather", "weatherForecast"],
+  ["crypto", "finance"]
+];
+
+const defaultGridTiles = LAYOUT_DEFINITIONS["balanced-grid"].slots.map((slot, index) => ({
   id: slot.id,
   label: slot.label,
   size: slot.size,
-  contentType: (["natureImage", "clockDate", "weather", "newsSwiss"] as ContentType[])[index] ?? "clock",
+  contentTypes: defaultGridContent[index] ?? ["clock"],
+  contentType: defaultGridContent[index]?.[0] ?? "clock",
   settings: {}
 }));
 
@@ -52,8 +60,8 @@ export const DEFAULT_SETTINGS: DashboardSettings = {
   setupComplete: false,
   userName: "",
   location: "Hedingen",
-  layout: "hybrid",
-  tiles: defaultHybridTiles,
+  layout: "balanced-grid",
+  tiles: defaultGridTiles,
   activeContent: DEFAULT_ACTIVE_CONTENT,
   viewOrder: DEFAULT_VIEW_ORDER,
   rotationSeconds: 20,
