@@ -1,4 +1,5 @@
 import { CONTENT_OPTIONS } from "../config/catalog";
+import { CONFIG_VERSION } from "../config/defaultSettings";
 import { LAYOUT_DEFINITIONS } from "../layouts/layoutDefinitions";
 import type { TileSize } from "../types/content";
 import type { DashboardSettings } from "../types/settings";
@@ -9,7 +10,7 @@ export function validateSettings(value: unknown): { ok: true; settings: Dashboar
   }
 
   const maybe = value as Partial<DashboardSettings>;
-  if (maybe.version !== 1) {
+  if (typeof maybe.version !== "number" || maybe.version < 1 || maybe.version > CONFIG_VERSION) {
     return { ok: false, reason: "Diese Konfigurationsversion wird nicht unterstützt." };
   }
 

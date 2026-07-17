@@ -37,6 +37,13 @@ export interface WeatherData {
     icon: string;
     condition: string;
   }>;
+  hourly?: Array<{
+    label: string;
+    temperature: number;
+    rainProbability: number;
+    icon: string;
+    condition: string;
+  }>;
   updatedAt: string;
 }
 

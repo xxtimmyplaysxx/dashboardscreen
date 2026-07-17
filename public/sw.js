@@ -1,4 +1,4 @@
-const CACHE_NAME = "bildschirmdashboard-v1";
+const CACHE_NAME = "bildschirmdashboard-v3";
 const APP_SHELL = ["/", "/index.html", "/manifest.webmanifest", "/icons/app-icon.svg", "/icons/apple-touch-icon.svg"];
 
 self.addEventListener("install", (event) => {

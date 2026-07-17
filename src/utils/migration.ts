@@ -42,6 +42,28 @@ function normalizeTiles(settings: DashboardSettings): DashboardSettings {
   };
 }
 
+function applyFullscreenPreset(settings: DashboardSettings): DashboardSettings {
+  return {
+    ...normalizeTiles({
+      ...settings,
+      layout: DEFAULT_SETTINGS.layout,
+      tiles: DEFAULT_SETTINGS.tiles
+    }),
+    setupComplete: settings.setupComplete,
+    userName: settings.userName,
+    location: settings.location,
+    activeContent: DEFAULT_SETTINGS.activeContent,
+    viewOrder: DEFAULT_SETTINGS.viewOrder,
+    rotationSeconds: DEFAULT_SETTINGS.rotationSeconds,
+    newsSources: settings.newsSources,
+    newsCategories: settings.newsCategories,
+    imageCategories: settings.imageCategories,
+    workingHours: settings.workingHours,
+    design: settings.design,
+    cache: settings.cache
+  };
+}
+
 export function migrateSettings(input: unknown): DashboardSettings {
   if (!isObject(input)) {
     return DEFAULT_SETTINGS;
@@ -49,8 +71,8 @@ export function migrateSettings(input: unknown): DashboardSettings {
 
   const partial = input as Partial<DashboardSettings>;
   const sourceVersion = typeof partial.version === "number" ? partial.version : 0;
-  const shouldApplyProfessionalPreset =
-    sourceVersion < 2 ||
+  const shouldApplyFullscreenPreset =
+    sourceVersion < 3 ||
     !Array.isArray(partial.tiles) ||
     partial.tiles.every((tile) => !Array.isArray(tile.contentTypes) || tile.contentTypes.length <= 1);
 
@@ -76,26 +98,8 @@ export function migrateSettings(input: unknown): DashboardSettings {
     migrated.layout = DEFAULT_SETTINGS.layout;
   }
 
-  if (shouldApplyProfessionalPreset) {
-    return {
-      ...normalizeTiles({
-        ...migrated,
-        layout: DEFAULT_SETTINGS.layout,
-        tiles: DEFAULT_SETTINGS.tiles
-      }),
-      setupComplete: migrated.setupComplete,
-      userName: migrated.userName,
-      location: migrated.location,
-      activeContent: migrated.activeContent,
-      viewOrder: migrated.viewOrder,
-      rotationSeconds: migrated.rotationSeconds,
-      newsSources: migrated.newsSources,
-      newsCategories: migrated.newsCategories,
-      imageCategories: migrated.imageCategories,
-      workingHours: migrated.workingHours,
-      design: migrated.design,
-      cache: migrated.cache
-    };
+  if (shouldApplyFullscreenPreset) {
+    return applyFullscreenPreset(migrated);
   }
 
   return normalizeTiles(migrated);

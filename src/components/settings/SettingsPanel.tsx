@@ -51,7 +51,7 @@ export function SettingsPanel({ settings, setSettings, onClose }: SettingsPanelP
     setMessage("Einstellungen wurden zurückgesetzt.");
   };
 
-  const applyProfessionalPreset = () => {
+  const applyFullscreenPreset = () => {
     setSettings((current) => ({
       ...current,
       layout: DEFAULT_SETTINGS.layout,
@@ -60,7 +60,7 @@ export function SettingsPanel({ settings, setSettings, onClose }: SettingsPanelP
       activeContent: DEFAULT_SETTINGS.activeContent,
       setupComplete: true
     }));
-    setMessage("Professionelles 4-Kachel-Layout wurde angewendet.");
+    setMessage("Fullscreen-Slideshow wurde angewendet.");
   };
 
   return (
@@ -262,8 +262,8 @@ export function SettingsPanel({ settings, setSettings, onClose }: SettingsPanelP
               <button className="secondary-button" type="button" onClick={() => importInputRef.current?.click()}>
                 Einstellungen importieren
               </button>
-              <button className="secondary-button" type="button" onClick={applyProfessionalPreset}>
-                4-Kachel-Layout anwenden
+              <button className="secondary-button" type="button" onClick={applyFullscreenPreset}>
+                Fullscreen-Slideshow anwenden
               </button>
               <button className="secondary-button danger" type="button" onClick={reset}>
                 Zurücksetzen

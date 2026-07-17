@@ -3,16 +3,24 @@ import type { FinanceQuote, ImageItem, NewsItem, TextSnippet, WeatherData } from
 export const demoWeather: WeatherData = {
   location: "Hedingen",
   temperature: 22,
-  condition: "Leicht bewölkt",
+  condition: "Leicht bewoelkt",
   icon: "partly-cloudy",
   high: 25,
   low: 16,
   rainProbability: 18,
   windKph: 8,
   forecast: [
-    { label: "Heute", high: 25, low: 16, icon: "partly-cloudy", condition: "Leicht bewölkt" },
+    { label: "Heute", high: 25, low: 16, icon: "partly-cloudy", condition: "Leicht bewoelkt" },
     { label: "Morgen", high: 24, low: 15, icon: "sunny", condition: "Freundlich" },
-    { label: "Samstag", high: 21, low: 14, icon: "rain", condition: "Schauer möglich" }
+    { label: "Samstag", high: 21, low: 14, icon: "rain", condition: "Schauer moeglich" }
+  ],
+  hourly: [
+    { label: "08:00", temperature: 17, rainProbability: 10, icon: "partly-cloudy", condition: "Leicht bewoelkt" },
+    { label: "09:00", temperature: 18, rainProbability: 12, icon: "partly-cloudy", condition: "Leicht bewoelkt" },
+    { label: "10:00", temperature: 20, rainProbability: 15, icon: "sunny", condition: "Freundlich" },
+    { label: "11:00", temperature: 21, rainProbability: 18, icon: "sunny", condition: "Freundlich" },
+    { label: "12:00", temperature: 22, rainProbability: 20, icon: "partly-cloudy", condition: "Leicht bewoelkt" },
+    { label: "13:00", temperature: 23, rainProbability: 24, icon: "partly-cloudy", condition: "Leicht bewoelkt" }
   ],
   updatedAt: new Date().toISOString()
 };
@@ -65,6 +73,22 @@ export const demoImages: ImageItem[] = [
     photographer: "Kuratierte Demo"
   },
   {
+    id: "forest-light",
+    url: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=82",
+    alt: "Wald im Morgenlicht",
+    category: "Waelder",
+    source: "Unsplash",
+    photographer: "Kuratierte Demo"
+  },
+  {
+    id: "ocean-day",
+    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=82",
+    alt: "Meer und Kueste",
+    category: "Meer",
+    source: "Unsplash",
+    photographer: "Kuratierte Demo"
+  },
+  {
     id: "sports-car",
     url: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1800&q=82",
     alt: "Sportwagen auf einer Strasse",
@@ -73,9 +97,41 @@ export const demoImages: ImageItem[] = [
     photographer: "Kuratierte Demo"
   },
   {
+    id: "car-detail",
+    url: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1800&q=82",
+    alt: "Automobil Detail",
+    category: "Autos",
+    source: "Unsplash",
+    photographer: "Kuratierte Demo"
+  },
+  {
+    id: "race-car",
+    url: "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1800&q=82",
+    alt: "Rennwagen",
+    category: "Sportwagen",
+    source: "Unsplash",
+    photographer: "Kuratierte Demo"
+  },
+  {
     id: "space-nebula",
     url: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1800&q=82",
     alt: "Weltraumnebel",
+    category: "Weltraum",
+    source: "Unsplash",
+    photographer: "Kuratierte Demo"
+  },
+  {
+    id: "earth-orbit",
+    url: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1800&q=82",
+    alt: "Erde aus dem Orbit",
+    category: "Planeten",
+    source: "Unsplash",
+    photographer: "Kuratierte Demo"
+  },
+  {
+    id: "star-field",
+    url: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1800&q=82",
+    alt: "Sternenhimmel",
     category: "Weltraum",
     source: "Unsplash",
     photographer: "Kuratierte Demo"

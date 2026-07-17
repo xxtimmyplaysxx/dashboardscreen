@@ -17,6 +17,12 @@ interface ForecastResponse {
     weather_code: number;
     wind_speed_10m?: number;
   };
+  hourly?: {
+    time: string[];
+    temperature_2m: number[];
+    precipitation_probability: number[];
+    weather_code: number[];
+  };
   daily?: {
     time: string[];
     temperature_2m_max: number[];
@@ -52,6 +58,27 @@ function weatherFor(code?: number) {
   return codeMap[String(code ?? 2)] ?? { condition: "Leicht bewölkt", icon: "partly-cloudy" };
 }
 
+function hourlyForecast(forecast: ForecastResponse) {
+  const hourly = forecast.hourly;
+  if (!hourly?.time?.length) return [];
+
+  const now = Date.now();
+  const startIndex = hourly.time.findIndex((time) => new Date(time).getTime() >= now - 1000 * 60 * 45);
+  const start = startIndex >= 0 ? startIndex : 0;
+
+  return hourly.time.slice(start, start + 12).map((time, offset) => {
+    const index = start + offset;
+    const hourWeather = weatherFor(hourly.weather_code?.[index]);
+    return {
+      label: time.slice(11, 16),
+      temperature: hourly.temperature_2m?.[index] ?? forecast.current?.temperature_2m ?? 0,
+      rainProbability: hourly.precipitation_probability?.[index] ?? 0,
+      icon: hourWeather.icon,
+      condition: hourWeather.condition
+    };
+  });
+}
+
 export const handler: Handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return optionsResponse();
 
@@ -65,7 +92,7 @@ export const handler: Handler = async (event) => {
     if (!place) throw new Error("Location not found");
 
     const forecast = await fetchJson<ForecastResponse>(
-      `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&forecast_days=5&timezone=auto`
+      `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&forecast_days=5&timezone=auto`
     );
 
     const currentWeather = weatherFor(forecast.current?.weather_code);
@@ -94,6 +121,7 @@ export const handler: Handler = async (event) => {
               condition: dayWeather.condition
             };
           }) ?? [],
+        hourly: hourlyForecast(forecast),
         updatedAt: new Date().toISOString()
       },
       900
@@ -110,6 +138,7 @@ export const handler: Handler = async (event) => {
         low: 16,
         rainProbability: 0,
         forecast: [],
+        hourly: [],
         updatedAt: new Date().toISOString()
       },
       120

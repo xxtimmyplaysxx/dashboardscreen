@@ -21,7 +21,8 @@ function pickImage(images: ImageItem[], category: ImageTileProps["category"], in
 }
 
 function ImageTile({ size, images, index, category, label }: ImageTileProps) {
-  const image = pickImage(images, category, index);
+  const timeBucket = Math.floor(Date.now() / (1000 * 20));
+  const image = pickImage(images, category, index + timeBucket);
   if (!image) {
     return (
       <TileFrame size={size} className="tile-muted">

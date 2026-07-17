@@ -515,6 +515,163 @@ select:focus-visible {
   color: var(--muted);
 }
 
+.weather-mini {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+}
+
+.weather-mini .weather-glyph {
+  transform: scale(0.58);
+}
+
+.weather-fullscreen {
+  justify-content: stretch;
+  gap: 28px;
+  padding: 44px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(240, 248, 255, 0.92) 54%, rgba(245, 255, 248, 0.92)),
+    #ffffff;
+}
+
+.weather-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+  gap: 32px;
+  align-items: center;
+}
+
+.weather-current h1 {
+  max-width: 980px;
+  margin: 6px 0 20px;
+  font-size: 4rem;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.weather-current-line {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+.weather-fullscreen .weather-temp {
+  font-size: 8rem;
+  font-weight: 780;
+}
+
+.weather-fullscreen .weather-glyph {
+  width: 96px;
+  height: 96px;
+  transform: scale(1.22);
+}
+
+.weather-fullscreen .weather-mini .weather-glyph {
+  transform: scale(0.58);
+}
+
+.weather-condition-large {
+  margin: 18px 0 0;
+  color: #3f4652;
+  font-size: 1.7rem;
+  line-height: 1.35;
+}
+
+.weather-detail-card {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-self: stretch;
+  padding: 22px;
+  border: 1px solid rgba(29, 29, 31, 0.08);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: var(--soft-shadow);
+}
+
+.weather-detail-card div {
+  display: grid;
+  min-height: 110px;
+  align-content: center;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.035);
+}
+
+.weather-detail-card span,
+.hourly-card span,
+.daily-card span,
+.hourly-card small,
+.daily-card small {
+  color: #5c6370;
+}
+
+.weather-detail-card strong {
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+.weather-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 22px;
+  min-height: 0;
+}
+
+.weather-panel {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid rgba(29, 29, 31, 0.08);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.weather-panel-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+}
+
+.weather-panel h2 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.hourly-strip,
+.daily-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.hourly-strip {
+  grid-template-columns: repeat(6, minmax(92px, 1fr));
+}
+
+.daily-grid {
+  grid-template-columns: repeat(5, minmax(104px, 1fr));
+}
+
+.hourly-card,
+.daily-card {
+  display: grid;
+  min-height: 148px;
+  align-content: space-between;
+  justify-items: start;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.035);
+}
+
+.hourly-card strong,
+.daily-card strong {
+  font-size: 1.35rem;
+}
+
 .news-tile {
   gap: 16px;
 }
@@ -543,11 +700,20 @@ select:focus-visible {
   -webkit-line-clamp: 4;
 }
 
-.news-fullscreen,
 .image-tile,
 .rest-view {
   background: #111111;
   color: #ffffff;
+}
+
+.news-fullscreen {
+  display: grid;
+  padding: 48px;
+  place-items: center;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(238, 244, 255, 0.94) 52%, rgba(247, 255, 246, 0.94)),
+    #ffffff;
+  color: #1d1d1f;
 }
 
 .news-fullscreen img,
@@ -560,7 +726,6 @@ select:focus-visible {
   object-fit: cover;
 }
 
-.news-fullscreen::after,
 .image-tile::after,
 .rest-view::after {
   position: absolute;
@@ -569,16 +734,31 @@ select:focus-visible {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.34));
 }
 
+.news-fullscreen img {
+  opacity: 0.18;
+  filter: saturate(0.9);
+}
+
+.news-fullscreen::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: rgba(255, 255, 255, 0.58);
+}
+
 .fullscreen-copy {
   position: relative;
   z-index: 1;
-  align-self: flex-start;
-  max-width: 780px;
-  margin-top: auto;
-  color: #ffffff;
+  max-width: 980px;
+  margin: auto;
+  color: #1d1d1f;
+  text-align: center;
 }
 
-.fullscreen-copy .eyebrow,
+.fullscreen-copy .eyebrow {
+  color: #5c6370;
+}
+
 .image-caption,
 .rest-copy .eyebrow {
   color: rgba(255, 255, 255, 0.78);
@@ -592,11 +772,31 @@ select:focus-visible {
   overflow-wrap: anywhere;
 }
 
-.fullscreen-copy p:last-child {
+.fullscreen-copy > p:not(.eyebrow) {
   max-width: 660px;
   margin: 20px 0 0;
+  margin-right: auto;
+  margin-left: auto;
+  color: #3f4652;
   font-size: 1.3rem;
   line-height: 1.45;
+}
+
+.news-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.news-meta-row span {
+  padding: 9px 13px;
+  border: 1px solid rgba(29, 29, 31, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #3f4652;
+  font-size: 0.92rem;
 }
 
 .image-caption {
@@ -1307,6 +1507,19 @@ input[type="color"] {
     font-size: 3rem;
   }
 
+  .weather-hero,
+  .weather-panels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hourly-strip {
+    grid-template-columns: repeat(4, minmax(92px, 1fr));
+  }
+
+  .daily-grid {
+    grid-template-columns: repeat(3, minmax(104px, 1fr));
+  }
+
   .clock-time,
   .tile-fullscreen .clock-time,
   .rest-copy time {
@@ -1364,6 +1577,52 @@ input[type="color"] {
   .fullscreen-copy h1,
   .onboarding-step h1 {
     font-size: 2.3rem;
+  }
+
+  .news-fullscreen,
+  .weather-fullscreen {
+    padding: 24px;
+  }
+
+  .weather-current h1 {
+    font-size: 2.35rem;
+  }
+
+  .weather-current-line {
+    gap: 16px;
+  }
+
+  .weather-fullscreen .weather-temp {
+    font-size: 4.4rem;
+  }
+
+  .weather-fullscreen .weather-glyph {
+    transform: scale(0.86);
+  }
+
+  .weather-detail-card,
+  .weather-panel {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .weather-detail-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .weather-detail-card div {
+    min-height: 88px;
+    padding: 12px;
+  }
+
+  .hourly-strip,
+  .daily-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hourly-card,
+  .daily-card {
+    min-height: 132px;
   }
 
   .tile-title {

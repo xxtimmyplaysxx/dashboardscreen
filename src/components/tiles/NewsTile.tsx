@@ -49,6 +49,11 @@ export function NewsFullscreenView({ items, index, label }: Omit<NewsTileProps, 
         </p>
         <h1>{item.title}</h1>
         <p>{item.description}</p>
+        <div className="news-meta-row">
+          <span>{item.source}</span>
+          <span>{item.category}</span>
+          <span>{formatRelativeTime(item.publishedAt)}</span>
+        </div>
       </div>
     </TileFrame>
   );

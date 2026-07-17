@@ -5,21 +5,21 @@ export const CONTENT_OPTIONS: ContentOption[] = [
   { type: "date", label: "Datum", description: "Wochentag und Datum", allowedSizes: ["small", "medium", "large", "fullscreen"] },
   { type: "clockDate", label: "Uhr und Datum", description: "Kombinierte Zeitansicht", allowedSizes: ["medium", "large", "fullscreen"] },
   { type: "greeting", label: "Begrüssung", description: "Persönliche Tagesbegrüssung", allowedSizes: ["small", "medium", "large", "fullscreen"] },
-  { type: "weather", label: "Wetter", description: "Aktuelles Wetter", allowedSizes: ["small", "medium", "large"] },
-  { type: "weatherForecast", label: "Wettervorhersage", description: "Mehrere Tage im Überblick", allowedSizes: ["medium", "large"] },
+  { type: "weather", label: "Wetter", description: "Aktuelles Wetter", allowedSizes: ["small", "medium", "large", "fullscreen"] },
+  { type: "weatherForecast", label: "Wettervorhersage", description: "Mehrere Tage im Überblick", allowedSizes: ["medium", "large", "fullscreen"] },
   { type: "newsSwiss", label: "Schweizer News", description: "Nachrichten aus der Schweiz", allowedSizes: ["small", "medium", "large", "fullscreen"] },
   { type: "newsInternational", label: "Internationale News", description: "Internationale Schlagzeilen", allowedSizes: ["small", "medium", "large", "fullscreen"] },
   { type: "newsTech", label: "Technik-News", description: "IT und Technologie", allowedSizes: ["small", "medium", "large", "fullscreen"] },
-  { type: "newsBusiness", label: "Wirtschaft", description: "Märkte und Unternehmen", allowedSizes: ["small", "medium", "large"] },
-  { type: "newsSport", label: "Sport", description: "Sportmeldungen", allowedSizes: ["small", "medium", "large"] },
+  { type: "newsBusiness", label: "Wirtschaft", description: "Märkte und Unternehmen", allowedSizes: ["small", "medium", "large", "fullscreen"] },
+  { type: "newsSport", label: "Sport", description: "Sportmeldungen", allowedSizes: ["small", "medium", "large", "fullscreen"] },
   { type: "formula1", label: "Formel 1", description: "Motorsport und F1", allowedSizes: ["small", "medium", "large", "fullscreen"] },
   { type: "natureImage", label: "Naturbild", description: "Ruhige Landschaften", allowedSizes: ["medium", "large", "fullscreen"] },
   { type: "carImage", label: "Autobild", description: "Sportwagen und Automobile", allowedSizes: ["medium", "large", "fullscreen"] },
   { type: "spaceImage", label: "Weltraumbild", description: "NASA und kuratierte Motive", allowedSizes: ["medium", "large", "fullscreen"] },
   { type: "quote", label: "Zitat", description: "Kurze seriöse Zitate", allowedSizes: ["medium", "large", "fullscreen"] },
   { type: "fact", label: "Fakt des Tages", description: "Wissenswerte kurze Fakten", allowedSizes: ["medium", "large", "fullscreen"] },
-  { type: "finance", label: "Börse", description: "Indizes und ausgewählte Werte", allowedSizes: ["medium", "large"] },
-  { type: "crypto", label: "Krypto", description: "Bitcoin und Ethereum", allowedSizes: ["small", "medium", "large"] }
+  { type: "finance", label: "Börse", description: "Indizes und ausgewählte Werte", allowedSizes: ["medium", "large", "fullscreen"] },
+  { type: "crypto", label: "Krypto", description: "Bitcoin und Ethereum", allowedSizes: ["small", "medium", "large", "fullscreen"] }
 ];
 
 export const NEWS_SOURCES = [
